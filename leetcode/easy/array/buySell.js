@@ -7,7 +7,17 @@
  * @return {number}
  */
 var maxProfit = function(prices) {
-    
+	if (prices.length == 1) {
+		return 0
+	}
+	
+    let priceChanges = new Array(prices.length)
+	// Runs at O(n)
+	priceChanges[0] = 0
+	for (let i = 1; i < prices.length; i++) {
+		priceChanges[i] = prices[i] - prices[i-1]
+	}
+	return priceChanges.reduce((a, v) => (v > 0) ? a + v : a)
 };
 
 function runTests() {
@@ -23,3 +33,5 @@ function runTests() {
 		console.log("Fail: buySell: price")
 	}
 }
+
+runTests()
