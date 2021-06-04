@@ -10,14 +10,15 @@ var maxProfit = function(prices) {
 	if (prices.length == 1) {
 		return 0
 	}
-	
-    let priceChanges = new Array(prices.length)
+	let sum = 0, change = 0
 	// Runs at O(n)
 	priceChanges[0] = 0
 	for (let i = 1; i < prices.length; i++) {
-		priceChanges[i] = prices[i] - prices[i-1]
+		change = prices[i] - prices[i-1]
+		if (change > 0)
+			sum += change
 	}
-	return priceChanges.reduce((a, v) => (v > 0) ? a + v : a)
+	return sum
 };
 
 function runTests() {
