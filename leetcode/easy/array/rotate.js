@@ -17,16 +17,8 @@ var rotate = function(nums, k) {
 	if (nums.length == 1 || nums.length == k || k == 0)
 		return
 	
-	let original_nums = nums.slice()
-	
-	let n = nums.length
-	// Initial posotion
-	let p = k
-	for (let i = 0; i < n; i++) {
-		nums[p++] = original_nums[i]
-		if (p >= n) {
-			p = 0
-		}
+	for(let j = 0; j < k; j++) {
+		nums.unshift(nums.pop())
 	}
 }
 
