@@ -17,8 +17,51 @@ var rotate = function(nums, k) {
 	if (nums.length == 1 || nums.length == k || k == 0)
 		return
 	
-	for(let j = 0; j < k; j++) {
-		nums.unshift(nums.pop())
+	// Buffer
+	let b = []
+	// Current position
+	let c = 0
+	
+	// DEBUG variable
+	let p = 0
+	
+	let overflow = false
+	
+	// Start position in case of circular dependency
+	let s = 0
+	let circular = false
+	if ((nums.length % 2 == 0 && k % 2 == 0) || (nums.length % 3 == 0 && k % 3 == 0)) {
+		circular = true
+	}
+	
+	b.push(nums[0])
+	for (let i = 0; i < nums.length; i++) {
+		p = c
+		
+		// Offset current position by rotation
+		c += k
+		
+		// Overflow check
+		if (c >= nums.length) {
+			c -= nums.length
+		}
+		
+		// Swap
+		b.push(nums[c])
+		nums[c] = b.shift()
+		
+		if (circular && c === s) {
+			c++
+			s = c
+			b = [nums[c]]
+			
+			overflow = true
+		}
+		else {
+			overflow = false
+		}
+		
+		console.log(`step (${i}): p: ${p} to c: ${c}, overflow: ${overflow}, b: ${b}, nums: ${nums}`)
 	}
 }
 
