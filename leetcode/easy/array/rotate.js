@@ -22,11 +22,6 @@ var rotate = function(nums, k) {
 	// Current position
 	let c = 0
 	
-	// DEBUG variable
-	let p = 0
-	
-	let overflow = false
-	
 	// Start position in case of circular dependency
 	let s = 0
 	let circular = false
@@ -36,8 +31,6 @@ var rotate = function(nums, k) {
 	
 	b.push(nums[0])
 	for (let i = 0; i < nums.length; i++) {
-		p = c
-		
 		// Offset current position by rotation
 		c += k
 		
@@ -46,22 +39,16 @@ var rotate = function(nums, k) {
 			c -= nums.length
 		}
 		
-		// Swap
+		// Swap elements
 		b.push(nums[c])
 		nums[c] = b.shift()
 		
+		// Circular dependency check
 		if (circular && c === s) {
 			c++
 			s = c
 			b = [nums[c]]
-			
-			overflow = true
 		}
-		else {
-			overflow = false
-		}
-		
-		console.log(`step (${i}): p: ${p} to c: ${c}, overflow: ${overflow}, b: ${b}, nums: ${nums}`)
 	}
 }
 
