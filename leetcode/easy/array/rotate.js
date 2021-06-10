@@ -17,44 +17,15 @@ var rotate = function(nums, k) {
 	if (nums.length == 1 || nums.length == k || k == 0)
 		return
 	
-	// Buffer
-	let b = []
-	// Current position
-	let c = 0
+	let original_nums = nums.slice()
 	
-	let p = 0
-	
-	let overflow = false
-	let circular = false
-	if ((nums.length % 2 == 0 && k % 2 == 0) || (nums.length % 3 == 0 && k % 3 == 0)) {
-		circular = true
-	}
-	// circular = false
-	
-	b.push(nums[0])
-	for (let i = 0; i < nums.length; i++) {
-		p = c
-		
-		// Offset current position by rotation
-		c += k
-		
-		// Overflow check
-		if (c >= nums.length) {
-			c -= nums.length
-			if (circular) {
-				overflow = true
-			}
-		}
-		
-		// Swap
-		b.push(nums[c])
-		nums[c] = b.shift()
-		
-		console.log(`step (${i}): p: ${p} to c: ${c}, overflow: ${overflow}, b: ${b}, nums: ${nums}`)
-		
-		if (circular && overflow) {
-			//b = [nums[c]]
-			overflow = false
+	let n = nums.length
+	// Initial posotion
+	let p = k
+	for (let i = 0; i < n; i++) {
+		nums[p++] = original_nums[i]
+		if (p >= n) {
+			p = 0
 		}
 	}
 }
