@@ -22,32 +22,27 @@ var rotate = function(nums, k) {
 	// Current position
 	let c = 0
 	
-	let divisible = false
+	let p = 0
 	
-	/*if (nums.length % k == 0) {
-		divisible = true
+	let overflow = false
+	let circular = false
+	if ((nums.length % 2 == 0 && k % 2 == 0) || (nums.length % 3 == 0 && k % 3 == 0)) {
+		circular = true
 	}
-	else */if (nums.length % 2 == 0 && k % 2 == 0) {
-		divisible = true
-	}
-	else if (nums.length % 3 == 0 && k % 3 == 0) {
-		divisible = true
-	}
-	
-	//console.log(`divisible: ${divisible}`)
-	
-	let looped = false
+	// circular = false
 	
 	b.push(nums[0])
 	for (let i = 0; i < nums.length; i++) {
+		p = c
+		
 		// Offset current position by rotation
 		c += k
 		
 		// Overflow check
 		if (c >= nums.length) {
 			c -= nums.length
-			if (divisible && i > 0) {
-				looped = true
+			if (circular) {
+				overflow = true
 			}
 		}
 		
@@ -55,15 +50,14 @@ var rotate = function(nums, k) {
 		b.push(nums[c])
 		nums[c] = b.shift()
 		
-		if (divisible && looped && i > 0) {
-			c++
-			b = [nums[c]]
-			looped = false
-		}
+		console.log(`step (${i}): p: ${p} to c: ${c}, overflow: ${overflow}, b: ${b}, nums: ${nums}`)
 		
-		//console.log(`step (${i}): c: ${c}, b: ${b}, nums: ${nums}`)
+		if (circular && overflow) {
+			//b = [nums[c]]
+			overflow = false
+		}
 	}
-};
+}
 
 function slowStableRotate(nums, k) {
 	if (nums.length == k || k == 0)
@@ -79,18 +73,20 @@ function slowStableRotate(nums, k) {
 		}
 		nums[0] = prev
 	}
-};
+}
+
+function generate_data(n) {
+	let data = []
+	for (let i = 0; i < n; i++)
+			data[i] = i + 1
+	return data
+}
 
 function runTestSuite() {
+	let failed = false
+	
 	let n_max = 128
 	let k = 0
-	
-	let generate_data = function(n) {
-		let data = []
-		for (let i = 0; i < n; i++)
-				data[i] = i + 1
-		return data
-	}
 	
 	main_loop:
 	for (let n = 0; n <= n_max; n++) {
@@ -106,46 +102,34 @@ function runTestSuite() {
 			if (false === data.every((v, i) => v == expected[i])) {
 				console.log(`fail: rotate: array(${n}, ${k})`)
 				console.log(`expected: ${expected}, ret: ${data}`)
+				
+				failed = true
 				break main_loop
 			}
 		}
 	}
+	
+	console.log("test suite failed")
 }
 
-runTestSuite()
+// runTestSuite()
 
-function runTests2() {
-	let k = 4
-	let n = 6
-	let data = []
-	for (let i = 0; i < n; i++)
-		data[i] = i + 1
+(function(n, k) {
+	let data = generate_data(n)
+	let expected = data.slice()
 	
-	console.log(data)
+	slowStableRotate(expected, k)
 	
 	rotate(data, k)
 	
-	console.log(data)
-}
-
-// runTests2()
-
-function runTests() {
-	let data = [1, 2, 3, 4, 5, 6, 7]
-	let k = 3
-	let expected = [5, 6, 7, 1, 2, 3, 4]
-	
-	let ret = rotate(data, k)
-	
-	if (true === data.every((v, i) => v == expected[i])) {
-		console.log("Pass: rotate: array")
+	if (false === data.every((v, i) => v == expected[i])) {
+		console.log(`fail: rotate: array(${n}, ${k})`)
+		console.log(`expected: ${expected}, ret: ${data}`)
+		
+		return
 	}
-	else {
-		console.log("Fail: rotate: array")
-	}
-}
-
-// runTests()
+	console.log(`pass: rotate(${n}, ${k})`)
+})(6, 4)
 
 /*import { rotateTestData as bigTestData } from './rotateTestData.js'
 
