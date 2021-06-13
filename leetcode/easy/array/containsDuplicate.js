@@ -27,10 +27,10 @@ function runTests() {
 	let ret = containsDuplicate(data)
 	
 	if (ret === expected) {
-		console.log("Pass: containsDuplicate: price")
+		console.log("Pass: containsDuplicate")
 	}
 	else {
-		console.log("Fail: containsDuplicate: price")
+		console.log("Fail: containsDuplicate")
 	}
 }
 
