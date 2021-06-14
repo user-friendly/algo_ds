@@ -17,39 +17,21 @@ var rotate = function(nums, k) {
 	if (nums.length == 1 || nums.length == k || k == 0)
 		return
 	
-	// Buffer
-	let b = []
-	// Current position
-	let c = 0
-	
-	// Start position in case of circular dependency
-	let s = 0
-	let circular = false
-	if ((nums.length % 2 == 0 && k % 2 == 0) || (nums.length % 3 == 0 && k % 3 == 0)) {
-		circular = true
-	}
-	
-	b.push(nums[0])
-	for (let i = 0; i < nums.length; i++) {
-		// Offset current position by rotation
-		c += k
-		
-		// Overflow check
-		if (c >= nums.length) {
-			c -= nums.length
-		}
-		
-		// Swap elements
-		b.push(nums[c])
-		nums[c] = b.shift()
-		
-		// Circular dependency check
-		if (circular && c === s) {
-			c++
-			s = c
-			b = [nums[c]]
+	let reverse = function(s = 0, e = nums.length - 1) {
+		// Subarray midpoint
+		let m = s + Math.ceil((e - s) / 2)
+		// Buffer
+		let b = 0
+		while (e >= m) {
+			b = nums[s]
+			nums[s++] = nums[e]
+			nums[e--] = b
 		}
 	}
+	
+	reverse()
+	reverse(0, k - 1)
+	reverse(k)
 }
 
 function slowStableRotate(nums, k) {
@@ -101,13 +83,15 @@ function runTestSuite() {
 			}
 		}
 	}
-	
-	console.log("test suite failed")
+	if (failed)
+		console.log("test suite failed")
+	else
+		console.log("test suite passed")
 }
 
-// runTestSuite()
+runTestSuite()
 
-(function(n, k) {
+/*(function(n, k) {
 	let data = generate_data(n)
 	let expected = data.slice()
 	
@@ -122,7 +106,7 @@ function runTestSuite() {
 		return
 	}
 	console.log(`pass: rotate(${n}, ${k})`)
-})(6, 4)
+})(6, 4)*/
 
 /*import { rotateTestData as bigTestData } from './rotateTestData.js'
 
