@@ -17,6 +17,52 @@ var rotate = function(nums, k) {
 	if (nums.length == 1 || nums.length == k || k == 0)
 		return
 	
+	// Buffer
+	let b = []
+	// Current position
+	let c = 0
+	
+	// Start position in case of circular dependency
+	let s = 0
+	
+	b.push(nums[0])
+	for (let i = 0; i < nums.length; i++) {
+		// Offset current position by rotation
+		c += k
+		
+		// Overflow check
+		if (c >= nums.length) {
+			c -= nums.length
+		}
+		
+		// Swap elements
+		b.push(nums[c])
+		nums[c] = b.shift()
+		
+		// Circular dependency check
+		if (c === s) {
+			c++
+			s = c
+			b = [nums[c]]
+		}
+	}
+}
+
+/**
+ * Rotate to the right
+ *
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var fastStableRotate = function(nums, k) {
+	if (k > nums.length) {
+		k = k % nums.length
+	}
+	
+	if (nums.length == 1 || nums.length == k || k == 0)
+		return
+	
 	let reverse = function(s = 0, e = nums.length - 1) {
 		// Subarray midpoint
 		let m = s + Math.ceil((e - s) / 2)
@@ -70,7 +116,7 @@ function runTestSuite() {
 			let data = generate_data(n)
 			let expected = data.slice()
 			
-			slowStableRotate(expected, k)
+			fastStableRotate(expected, k)
 			
 			rotate(data, k)
 			
