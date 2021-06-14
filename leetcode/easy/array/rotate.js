@@ -18,14 +18,17 @@ var rotate = function(nums, k) {
 		return
 	
 	// Buffer
-	let b = []
+	let b = 0
+	// Swap buffer
+	let sb = 0
+	
 	// Current position
 	let c = 0
 	
 	// Start position in case of circular dependency
 	let s = 0
 	
-	b.push(nums[0])
+	b = nums[0]
 	for (let i = 0; i < nums.length; i++) {
 		// Offset current position by rotation
 		c += k
@@ -36,9 +39,10 @@ var rotate = function(nums, k) {
 		}
 		
 		// Swap elements
-		b.push(nums[c])
-		nums[c] = b.shift()
-		
+		sb = nums[c]
+		nums[c] = b
+		b = sb
+			
 		// Circular dependency check
 		if (c === s) {
 			c++
